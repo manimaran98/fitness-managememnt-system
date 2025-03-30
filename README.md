@@ -85,3 +85,18 @@ This project is licensed under the [MIT License](LICENSE).
 
 Thanks to all contributors and the open-source community for their support!
 
+
+## Screen Layout
+
+##Login Screen
+![image](https://github.com/user-attachments/assets/4b40b8a8-6741-47cc-9b06-f28a4fccf6c7)
+
+
+## Registration Layout
+![image](https://github.com/user-attachments/assets/d687aeab-a38d-4f49-b36f-db487e499f6f)
+
+
+## Dashbaord
+![image](https://github.com/user-attachments/assets/7708f346-7807-48b3-bac2-0b44d36a7aec)
+
+
