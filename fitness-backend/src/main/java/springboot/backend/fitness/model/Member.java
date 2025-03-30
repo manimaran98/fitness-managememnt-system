@@ -13,7 +13,6 @@ public class Member implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private Long id;
-
     private String name;
     private String email;
     private String phone;
@@ -24,13 +23,13 @@ public class Member implements Serializable {
     private LocalDate dateJoined;
 
     @Column(nullable = false)
-    private String membershipType; // e.g., "Monthly", "Annual"
+    private String membershipType;
 
-    private boolean active; // Active membership status
+    private String active; // Active membership status
 
     public Member() {}
 
-    public Member(String name, String email,String imageUrl, String phone, String address, LocalDate dateJoined, String membershipType, boolean active) {
+    public Member(String name, String email,String imageUrl, String phone, String address, LocalDate dateJoined, String membershipType, String active) {
         this.name = name;
         this.email = email;
         this.imageUrl = imageUrl;
@@ -98,11 +97,11 @@ public class Member implements Serializable {
         this.membershipType = membershipType;
     }
 
-    public boolean isActive() {
+    public String getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(String active) {
         this.active = active;
     }
 

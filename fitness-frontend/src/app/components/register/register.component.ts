@@ -29,15 +29,14 @@ export class RegisterComponent {
     this.service.register(this.registerForm.value).subscribe(
       (response) => {
         if (response.id != null) {
-          alert('Hello ' + response.name);
+          alert('Registration Success');
           localStorage.setItem('jwt', response.token); // Store JWT token
-          this.router.navigateByUrl('/dashboard').then(() => {
-            window.location.reload(); // Optional: If you want a hard refresh
-          });
+          this.router.navigateByUrl('/dashboard').then(() => {});
         }
       },
       (error) => {
         console.error('Registration failed:', error);
+        alert('Registration Fail');
       }
     );
   }

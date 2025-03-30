@@ -26,16 +26,20 @@ export class LoginComponent implements OnInit {
   }
 
   submitForm() {
-    this.service.login(this.loginForm.value).subscribe((response) => {
-      console.log(response);
-      if (response.jwt != null) {
-        alert('Hello, Your token is ' + response.jwt);
-        const jwtToken = response.jwt;
-        localStorage.setItem('jwt', jwtToken);
-        this.router.navigateByUrl('/dashboard').then(() => {
-          window.location.reload(); // Optional: If you want a hard refresh
-        });
+    this.service.login(this.loginForm.value).subscribe(
+      (response) => {
+        console.log(response);
+        if (response.jwt != null) {
+          alert('Login Success');
+          const jwtToken = response.jwt;
+          localStorage.setItem('jwt', jwtToken);
+          this.router.navigateByUrl('/dashboard').then(() => {});
+        }
+      },
+      (error) => {
+        console.error('Login failed:', error);
+        alert('Login Fail, Please Try Again');
       }
-    });
+    );
   }
 }

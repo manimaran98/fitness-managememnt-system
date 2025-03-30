@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Member } from '../Member';
 
 const BASE_URL = 'http://localhost:8080/';
 
@@ -35,13 +36,6 @@ export class JwtService {
     });
   }
 
-  /** Fetch protected API with JWT */
-  hello(): Observable<any> {
-    return this.http.get(BASE_URL + 'api/hello', {
-      headers: this.createAuthorizationHeader(),
-    });
-  }
-
   /** Create authorization headers */
   private createAuthorizationHeader(): HttpHeaders {
     const jwtToken = this.getToken();
@@ -67,5 +61,29 @@ export class JwtService {
   /** Logout user */
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+  }
+
+  public getMember(): Observable<any> {
+    return this.http.get<any[]>(BASE_URL + 'member/all', {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  public addMember(Member: any): Observable<any> {
+    return this.http.post<any>(BASE_URL + 'member/add', Member, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  public updateMember(Member: any): Observable<any> {
+    return this.http.put<any>(BASE_URL + 'member/update', Member, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  public deleteMember(MemberId: any): Observable<any> {
+    return this.http.delete<any>(BASE_URL + 'member/delete/' + MemberId, {
+      headers: this.createAuthorizationHeader(),
+    });
   }
 }

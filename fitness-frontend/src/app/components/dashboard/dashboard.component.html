@@ -1,4 +1,472 @@
-<h1>{{ message }}</h1>
-<div>
-  <h1>Welcome to the Dashboard</h1>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <!-- Left Side: Brand -->
+    <a class="navbar-brand" href="#">Fitness Management System</a>
+
+    <!-- Navbar Toggler for Mobile View -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarContent"
+      aria-controls="navbarContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Right Side: Navigation Items -->
+    <div
+      class="collapse navbar-collapse justify-content-end"
+      id="navbarContent"
+    >
+      <ul class="navbar-nav">
+        <!-- Add Member Button -->
+        <li class="nav-item">
+          <a class="nav-link" (click)="onOpenModal(null, 'add')">Add Member</a>
+        </li>
+      </ul>
+
+      <!-- Search Bar (Moves Below Menu on Small Screens) -->
+      <form class="d-flex mx-lg-3 my-2 my-lg-0">
+        <input
+          type="search"
+          (input)="getMembers(searchInput.value)"
+          #searchInput
+          class="form-control me-2"
+          placeholder="Search member..."
+        />
+      </form>
+
+      <!-- Logout Button -->
+      <ul class="navbar-nav">
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link" (click)="logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container" id="main-container">
+  <div class="container mt-5">
+    <div class="row">
+      <div *ngFor="let member of filteredMembers" class="col-md-6 col-xl-3">
+        <div class="card m-b-30" style="margin-bottom: 5%">
+          <div class="card-body row">
+            <div class="col-6">
+              <a>
+                <img
+                  src="{{ member?.imageUrl }}"
+                  alt=""
+                  class="img-fluid rounded-circle w-60"
+                />
+              </a>
+            </div>
+            <div class="col-6 card-title align-self-center mb-0">
+              <h5>{{ member?.name }}</h5>
+            </div>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <i class="fa fa-envelope float-right"></i>Email :
+              {{ member?.email }}
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-phone float-right"></i>Phone : {{ member?.phone }}
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-phone float-right"></i>Address :
+              {{ member?.address }}
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-phone float-right"></i>Member Since:
+              {{ member?.dateJoined }}
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-phone float-right"></i>Membership:
+              {{ member?.membershipType }}
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-phone float-right"></i>Status:
+              {{ member?.active }}
+            </li>
+          </ul>
+          <div class="card-body">
+            <div class="d-flex justify-content-end btn-group btn-group-sm">
+              <button
+                (click)="onOpenModal(member, 'edit')"
+                class="btn btn-primary btn-sm"
+                title="Edit"
+              >
+                <i class="fa fa-pencil"></i> Edit
+              </button>
+              <button
+                (click)="onOpenModal(member, 'delete')"
+                class="btn btn-danger btn-sm"
+                title="Delete"
+              >
+                <i class="fa fa-times"></i> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Member Modal -->
+  <div id="addMemberModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Member</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="memberForm" (ngSubmit)="onAddMember(memberForm)">
+            <!-- Profile Picture -->
+            <div class="form-group text-center">
+              <img
+                src="https://www.w3schools.com/howto/img_avatar.png"
+                alt="Profile Picture"
+                class="img-fluid rounded-circle"
+                style="max-width: 150px; height: auto"
+              />
+              <input type="hidden" formControlName="imageUrl" />
+            </div>
+
+            <!-- Full Name -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Full Name</label>
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                formControlName="name"
+                required
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                formControlName="email"
+                required
+              />
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone</label>
+              <input
+                type="text"
+                id="phone"
+                class="form-control"
+                formControlName="phone"
+                required
+              />
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <textarea
+                id="address"
+                class="form-control"
+                formControlName="address"
+                rows="2"
+                required
+              ></textarea>
+            </div>
+
+            <!-- Membership Type -->
+            <div class="mb-3">
+              <label for="membershipType" class="form-label"
+                >Membership Type</label
+              >
+              <select
+                id="membershipType"
+                class="form-select"
+                formControlName="membershipType"
+                required
+              >
+                <option value="Gold">Gold</option>
+                <option value="Silver">Silver</option>
+                <option value="Platinum">Platinum</option>
+              </select>
+            </div>
+
+            <!-- Active/Inactive Status (String Values) -->
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  id="active"
+                  class="form-check-input"
+                  formControlName="active"
+                  value="Active"
+                />
+                <label for="active" class="form-check-label">Active</label>
+              </div>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  id="inactive"
+                  class="form-check-input"
+                  formControlName="active"
+                  value="Inactive"
+                />
+                <label for="inactive" class="form-check-label">Inactive</label>
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="modal-footer">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="memberForm.invalid"
+              >
+                Add Member
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div
+    id="editMemberModal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="memberEditModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit member {{ editMember?.name }}</h5>
+        </div>
+        <div class="modal-body">
+          <form #editForm="ngForm" (ngSubmit)="onUpdateMember(editForm.value)">
+            <div class="form-group text-center">
+              <img
+                [src]="editMember?.imageUrl"
+                alt="Member Image"
+                class="img-fluid rounded-circle"
+                style="max-width: 120px; height: 100%"
+              />
+            </div>
+
+            <input type="hidden" name="id" [ngModel]="editMember?.id" />
+            <input
+              type="hidden"
+              name="imageUrl"
+              [ngModel]="editMember?.imageUrl"
+            />
+            <input type="hidden" name="userCode" [ngModel]="editMember?.id" />
+            <input
+              type="hidden"
+              name="dateJoined"
+              [ngModel]="editMember?.dateJoined"
+            />
+
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                [ngModel]="editMember?.name"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                [ngModel]="editMember?.email"
+                required
+                email
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input
+                type="text"
+                class="form-control"
+                id="phone"
+                name="phone"
+                [ngModel]="editMember?.phone"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input
+                type="text"
+                class="form-control"
+                id="address"
+                name="address"
+                [ngModel]="editMember?.address"
+                required
+              />
+            </div>
+
+            <!-- Membership Type -->
+            <div class="mb-3">
+              <label for="membershipType" class="form-label"
+                >Membership Type</label
+              >
+              <select
+                id="membershipType"
+                class="form-select"
+                name="membershipType"
+                [(ngModel)]="editMember!.membershipType"
+                required
+              >
+                <option value="" disabled>Select Membership</option>
+                <option value="Gold">Gold</option>
+                <option value="Silver">Silver</option>
+                <option value="Platinum">Platinum</option>
+              </select>
+            </div>
+
+            <!-- Active/Inactive Status -->
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  id="active"
+                  class="form-check-input"
+                  name="active"
+                  [(ngModel)]="editMember!.active"
+                  value="Active"
+                  required
+                />
+                <label for="active" class="form-check-label">Active</label>
+              </div>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  id="inactive"
+                  class="form-check-input"
+                  name="active"
+                  [(ngModel)]="editMember!.active"
+                  value="Inactive"
+                  required
+                />
+                <label for="inactive" class="form-check-label">Inactive</label>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                data-bs-dismiss="modal"
+                class="btn btn-primary"
+                [disabled]="!editForm.valid"
+              >
+                Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div
+    id="deleteMemberModal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="deleteModelLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModelLabel">Delete member</h5>
+        </div>
+        <div class="d-flex justify-content-center">
+          <a>
+            <img
+              src="{{ editMember?.imageUrl }}"
+              alt=""
+              class="img-fluid rounded-circle"
+              style="max-width: 120px; height: 100%"
+            />
+          </a>
+        </div>
+        <div class="modal-body">
+          <p>
+            Are you sure you want to delete member {{ deleteMember?.name }}?
+          </p>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              No
+            </button>
+            <button
+              (click)="onDeleteMember(deleteMember?.id)"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Notification for no member -->
+  <div *ngIf="members?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">NO member!</h4>
+      <p>No member were found.</p>
+    </div>
+  </div>
 </div>
+<Footer style="margin: 2%"></Footer>

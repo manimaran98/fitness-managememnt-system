@@ -1,0 +1,53 @@
+.btn {
+  padding: 8px 12px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+.card {
+  min-height: 100%; /* Ensures all cards have the same height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  width: 80px; /* Fixed size for uniformity */
+  height: 80px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.list-group-item {
+  font-size: 14px;
+  text-align: left; /* Align text properly */
+}
+
+.btn-group {
+  margin-top: 10px;
+}
+
+.btn {
+  width: 48%; /* Ensures equal button width */
+}
+
+.container {
+  max-width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centers cards */
+  gap: 20px; /* Adds spacing between cards */
+}
+
+.card-footer {
+  padding: 10px;
+  background: #f8f9fa; /* Light background for better contrast */
+  border-top: 1px solid #ddd;
+  text-align: center;
+}
