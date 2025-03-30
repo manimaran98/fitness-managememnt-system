@@ -48,7 +48,7 @@ The Fitness Management System is a web application designed to help fitness cent
    ```
 5. Build and run the backend:
    ```bash
-   mvn spring-boot:run
+   mvn spring-boot:run or ./mvnw spring-boot:run
    ```
 
 #### Frontend Setup
